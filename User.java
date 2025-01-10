@@ -43,8 +43,14 @@
 
     /** If this user follows the given name, returns true; otherwise returns false. */
     public boolean follows(String name) {
+        if (name == null) {
+            return false;
+        }
+        String newName = "" + name.charAt(0);
+        newName = newName.toUpperCase();
+        newName += name.substring(1);
         for (int i = 0; i < fCount; i++) {
-            if (follows[i].equals(name)){
+            if (follows[i].equals(newName)){
                 return true;
             }
         }
@@ -54,7 +60,13 @@
     /** Makes this user follow the given name. If successful, returns true. 
      *  If this user already follows the given name, or if the follows list is full, does nothing and returns false; */
     public boolean addFollowee(String name) {
-        if (follows(name) || fCount == maxfCount){
+        if (name == null) {
+            return false;
+        }
+        String newName = "" + name.charAt(0);
+        newName = newName.toUpperCase();
+        newName += name.substring(1);
+        if (follows(newName) || fCount == maxfCount){
             return false;
         }
 
@@ -66,8 +78,14 @@
     /** Removes the given name from the follows list of this user. If successful, returns true.
      *  If the name is not in the list, does nothing and returns false. */
     public boolean removeFollowee(String name) {
+        if (name == null) {
+            return false;
+        }
+        String newName = "" + name.charAt(0);
+        newName = newName.toUpperCase();
+        newName += name.substring(1);
         for (int i = 0; i < follows.length; i++) {
-            if (follows[i] == name){
+            if (follows[i] == newName){
                 follows[i] = null;
                 for (int j = i+1; j < follows.length; j++) {
                     if (follows[j] != null){
