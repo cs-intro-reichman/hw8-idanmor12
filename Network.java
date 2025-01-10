@@ -58,7 +58,7 @@ public class Network {
      *  or if the "follows" addition failed for some reason, returns false. */
     public boolean addFollowee(String name1, String name2) {
         if (name1 == null || name2 == null || name1.equals(name2) || 
-            getUser(name1) == null || getUser(name2) == null || getUser(name1).getfCount() == getUser(name1).getfFollows().length) {
+                getUser(name1) == null || getUser(name2) == null) {
             return false;
         }
 
@@ -79,9 +79,10 @@ public class Network {
         int recommendedUserIndex = 0;
         for (int i = 0; i < userCount; i++) {
             if (users[i] != givenUser){
-                if (!givenUser.isFriendOf(users[i]) &&
-                    users[i].countMutual(givenUser) > highestMutualFiendsCount){
-                        recommendedUserIndex = i;
+                int numberOfMutal = users[i].countMutual(givenUser);
+                if (numberOfMutal > highestMutualFiendsCount){
+                    highestMutualFiendsCount= numberOfMutal;
+                    recommendedUserIndex = i;
                 }
             }
         }
@@ -93,21 +94,20 @@ public class Network {
      *  The user who appears the most in the follow lists of all the users. */
     public String mostPopularUser() {
         int mostPopularCount = 0;
-        int mostPopularIndex = 0;
+        String mostPopularUser = "";
         if (userCount == 0) {
             return null;
-
         }
 
         for (int i = 0; i < userCount; i++) {
             int currFoloweeCount = followeeCount(users[i].getName());
             if (currFoloweeCount > mostPopularCount){
                 mostPopularCount = currFoloweeCount;
-                mostPopularIndex = i;
+                mostPopularUser = users[i].getName();
             }
         }
 
-        return users[mostPopularIndex].getName();
+        return mostPopularUser;
     }
 
     /** Returns the number of times that the given name appears in the follows lists of all
@@ -130,11 +130,13 @@ public class Network {
 
     // Returns a textual description of all the users in this network, and who they follow.
     public String toString() {
-        String ans = "";
+        String ans = "Network:";
         for (int i = 0; i < userCount; i++) {
-            ans += users[i].toString() + ". ";
+            if (users[i] != null) {
+                ans = ans + "\n" + users[i];
+            }
         }
-       //// Replace the following statement with your code
-       return ans;
+
+        return ans;
     }
 }
