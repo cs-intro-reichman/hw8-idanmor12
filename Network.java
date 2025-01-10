@@ -30,14 +30,8 @@ public class Network {
      *  If there is no such user, returns null.
      *  Notice that the method receives a String, and returns a User object. */
     public User getUser(String name) {
-        if (name == null) {
-            return null;
-        }
-        String newName = "" + name.charAt(0);
-        newName = newName.toUpperCase();
-        newName += name.substring(1);
         for (int i = 0; i < userCount; i++) {
-            if (users[i].getName().equals(newName)){
+            if (users[i].getName().equals(name)){
                 return users[i];
             }
         }
@@ -50,17 +44,12 @@ public class Network {
     *  If the given name is already a user in this network, does nothing and returns false;
     *  Otherwise, creates a new user with the given name, adds the user to this network, and returns true. */
     public boolean addUser(String name) {
-        if (name == null) {
-            return false;
-        }
-        String newName = "" + name.charAt(0);
-        newName = newName.toUpperCase();
-        newName += name.substring(1);
-        if (userCount == users.length || getUser(newName) != null){
+        if (userCount >= users.length || getUser(name) != null || userCount == users.length) {
             return false;
         }
 
         users[userCount] = new User(name);
+        userCount++;
         return true;
     }
 
@@ -68,39 +57,30 @@ public class Network {
      *  If any of the two names is not a user in this network,
      *  or if the "follows" addition failed for some reason, returns false. */
     public boolean addFollowee(String name1, String name2) {
-        String newName1 = "" + name1.charAt(0);
-        newName1 = newName1.toUpperCase();
-        newName1 += name1.substring(1);
-        String newName2 = "" + name2.charAt(0);
-        newName2 = newName2.toUpperCase();
-        newName2 += name2.substring(1);
-
-        User user1 = getUser(newName1);
-        if (user1 == null || getUser(newName2) == null || user1.getfCount() == user1.getfFollows().length){
+        if (name1 == null || name2 == null || name1.equals(name2) || 
+            getUser(name1) == null || getUser(name2) == null || getUser(name1).getfCount() == getUser(name1).getfFollows().length) {
             return false;
         }
 
-        getUser(newName1).addFollowee(newName2);
+        getUser(name1).addFollowee(name2);
         return true;
     }
     
     /** For the user with the given name, recommends another user to follow. The recommended user is
      *  the user that has the maximal mutual number of followees as the user with the given name. */
     public String recommendWhoToFollow(String name) {
-        if (name == null) {
-            return null;
+        User givenUser = getUser(name);
+        if (givenUser == null) {
+            return "The user does not exist in the network";
+
         }
-        String newName = "" + name.charAt(0);
-        newName = newName.toUpperCase();
-        newName += name.substring(1);
-        User currUser = getUser(newName);
+        
         int highestMutualFiendsCount = 0;
         int recommendedUserIndex = 0;
-
         for (int i = 0; i < userCount; i++) {
-            if (users[i] != currUser){
-                if (!currUser.isFriendOf(users[i]) &&
-                    users[i].countMutual(currUser) > highestMutualFiendsCount){
+            if (users[i] != givenUser){
+                if (!givenUser.isFriendOf(users[i]) &&
+                    users[i].countMutual(givenUser) > highestMutualFiendsCount){
                         recommendedUserIndex = i;
                 }
             }
@@ -114,6 +94,11 @@ public class Network {
     public String mostPopularUser() {
         int mostPopularCount = 0;
         int mostPopularIndex = 0;
+        if (userCount == 0) {
+            return null;
+
+        }
+
         for (int i = 0; i < userCount; i++) {
             int currFoloweeCount = followeeCount(users[i].getName());
             if (currFoloweeCount > mostPopularCount){
@@ -131,10 +116,8 @@ public class Network {
         if (name == null) {
             return -1;
         }
-        String newName = "" + name.charAt(0);
-        newName = newName.toUpperCase();
-        newName += name.substring(1);
-        User currUser = getUser(newName);
+
+        User currUser = getUser(name);
         int counter = 0;
 
         for (int i = 0; i < userCount; i++) {
