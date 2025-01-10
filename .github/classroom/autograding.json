@@ -48,7 +48,7 @@
       "input": "",
       "output": "All test cases have passed",
       "timeout": 10,
-      "points": 8
+      "points": 10
     },
     {
       "name": "Network class, NETWORK_GET_USER test",

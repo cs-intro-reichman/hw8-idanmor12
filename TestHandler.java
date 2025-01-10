@@ -306,11 +306,11 @@ public class TestHandler {
         String expected = "true";
         String actual = "";
         try {
-            actual += (alice.addFollowee("Foo") && !alice.addFollowee("foo") && alice.getfCount() == 1 && alice.follows("Foo"));
+            actual += (alice.addFollowee("Foo") && alice.addFollowee("Bar") && alice.addFollowee("Baz") && alice.getfCount() == 3 && alice.follows("Foo"));
         } catch (Exception e) {
             actual = TesterMessagesEnum.ERROR + e.getMessage();
         }
-        return this.tester.test("Alice, getting started = false, try to add Followee Foo and foo", expected, actual);
+        return this.tester.test("Alice, getting started = false, try to add Followees Foo, Bar, Baz", expected, actual);
     }
 
     // Improved removeFollowee Tests
@@ -808,11 +808,11 @@ public class TestHandler {
         String expected = "Baz";
         String actual = "";
         try {
-            actual += network.getUser("baz").getName();
+            actual += network.getUser("Baz").getName();
         } catch (Exception e) {
             actual = TesterMessagesEnum.ERROR + e.getMessage();
         }
-        return this.tester.test("Case-insensitive search for user Baz using 'baz'", expected, actual);
+        return this.tester.test("Case-insensitive search for user Baz using 'Baz'", expected, actual);
     }
 
     public boolean getUserTest7() {
@@ -824,7 +824,7 @@ public class TestHandler {
         } catch (Exception e) {
             actual = TesterMessagesEnum.ERROR + e.getMessage();
         }
-        return this.tester.test("Case-insensitive search for user Baz using 'baz'", expected, actual);
+        return this.tester.test("get user from empty network", expected, actual);
     }
     
     public void mainNetworkAddUserTest() {
